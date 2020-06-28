@@ -25,11 +25,12 @@ class Stack:
 
 def check_stack(test_string):
 
+    stack.stack = ''
     for string in test_string:
         stack.push(string)
 
     if stack.size()%2 != 0:
-        return 'несбалонсирован'
+        return 'несбалансирован'
 
     type1 = 0
     type2 = 0
@@ -38,20 +39,31 @@ def check_stack(test_string):
     while stack.isEmpty() != True:
         test_item = stack.pop()
         if test_item == '(': type1 += 1
-        elif test_item == ')': type1 -= 1
+        elif test_item == ')':
+            type1 -= 1
+            if stack.peek() == '[' or stack.peek() == '{':
+                return 'несбалансирован'
         elif test_item == '[': type2 += 1
-        elif test_item == ']': type2 -= 1
+        elif test_item == ']':
+            type2 -= 1
+            if stack.peek() == '(' or stack.peek() == '{':
+                return 'несбалансирован'
         elif test_item == '{': type3 += 1
-        elif test_item == '}': type3 -= 1
+        elif test_item == '}':
+            type3 -= 1
+            if stack.peek() == '[' or stack.peek() == '(':
+                return 'несбалансирован'
 
     if not type1 and not type2 and not type3:
-        return 'сбалонсирован'
+        return 'сбалансирован'
     else:
-        return 'несбалонсирован'
+        return 'несбалансирован'
 
 if __name__ == '__main__':
 
     stack = Stack()
+
+    # Примеры из домашнего задания
     test_string = '(((([{}]))))'
     print(f'Стек {test_string} {check_stack(test_string)}')
     test_string = '[([])((([[[]]])))]{()}'
@@ -65,8 +77,6 @@ if __name__ == '__main__':
     test_string = '[[{())}]'
     print(f'Стек {test_string} {check_stack(test_string)}')
 
-
-
-
-
-
+    # Пример для полноты картины
+    test_string = '[(])'
+    print(f'Стек {test_string} {check_stack(test_string)}')
